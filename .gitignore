@@ -1,0 +1,7 @@
+target/*
+.idea/*
+unichaineventquery.iml
+.classpath
+.factorypath
+.settings/*
+.vscode/*
