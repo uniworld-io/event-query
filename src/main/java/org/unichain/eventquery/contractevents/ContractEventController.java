@@ -32,6 +32,7 @@ import org.unichain.eventquery.query.QueryFactory;
 import org.unichain.eventquery.response.Response;
 import org.unichain.eventquery.solidityevents.SolidityTriggerEntity;
 import org.unichain.common.utils.LogConfig;
+import org.unichain.eventquery.transactions.TransactionTriggerEntity;
 
 @RestController
 @Component
@@ -539,6 +540,30 @@ public class ContractEventController {
     }
 
     return array;
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/event/nativecontract")
+  public List<TransactionTriggerEntity> events(
+          @RequestParam(value = "confirmed", required = false, defaultValue = "false") boolean confirmed,
+          @RequestParam(value = "since", required = false, defaultValue = "0") long timestamp,
+          @RequestParam(value = "contractType") String contractType,
+          @RequestParam(value = "blockNumber", required = false, defaultValue = "-1") long latest,
+          @RequestParam(value = "sort", required = false, defaultValue = "-timeStamp") String sort,
+          @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
+          @RequestParam(value = "start", required = false, defaultValue = "0") int start) {
+    QueryFactory query = new QueryFactory();
+    if (confirmed) {
+      query.setBlockNumLte(latestSolidifiedBlockNumber.get());
+    } else {
+      query.setBlockNumGt(latestSolidifiedBlockNumber.get());
+    }
+    query.setContractTypeEqual(contractType);
+    if (latest != -1) {
+      query.setBlockNum(latest);
+    }
+    query.setTimestampGreaterEqual(timestamp);
+    query.setPageniate(this.setPagniateVariable(limit, sort, start));
+    return mongoTemplate.find(query.getQuery(), TransactionTriggerEntity.class);
   }
 
   JSONObject getResultType(String fullName, String eventSignature) {
