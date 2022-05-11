@@ -506,7 +506,6 @@ public class ContractEventController {
           @RequestParam(value = "confirmed", required = false, defaultValue = "false") boolean confirmed,
           @RequestParam(value = "since", required = false, defaultValue = "0") long timestamp,
           @RequestParam(value = "topic") String topic,
-          @RequestParam(value = "blockNumber", required = false, defaultValue = "-1") long latest,
           @RequestParam(value = "sort", required = false, defaultValue = "-timeStamp") String sort,
           @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
           @RequestParam(value = "start", required = false, defaultValue = "0") int start) {
@@ -517,9 +516,6 @@ public class ContractEventController {
       query.setBlockNumGt(latestSolidifiedBlockNumber.get());
     }
     query.setEventTopicEqual(topic);
-    if (latest != -1) {
-      query.setBlockNum(latest);
-    }
     query.setTimestampGreaterEqual(timestamp);
     query.setPage(this.setPagingVariable(limit, sort, start));
     return mongoTemplate.find(query.getQuery(), NativeContractEventTriggerEntity.class);

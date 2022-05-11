@@ -77,7 +77,7 @@ from: from address, default is ""
 to: to address, default is ""
 token: tokenName, default is ""
 
-Example: https://api.unichainex.io/transfers?token=trx&limit=1&sort=timeStamp&start=2&block=0&from=TJ7yJNWS8RmvpXcAyXBhvFDfGpV9ZYc3vt&to=TAEcoD8J7P5QjWT32r31gat8L7Sga2qUy8
+Example: https://api.unichainex.io/transfers?token=urc&limit=1&sort=timeStamp&start=2&block=0&from=TJ7yJNWS8RmvpXcAyXBhvFDfGpV9ZYc3vt&to=TAEcoD8J7P5QjWT32r31gat8L7Sga2qUy8
 ```
 Function: get transfers by transactionId
 ```
