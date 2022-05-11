@@ -1,5 +1,5 @@
 #  Unichain Event Query Service
-unichainEventQuery is implemented with unichain's new event subscribe model.   	
+EventQuery is implemented with unichain's new event subscribe model.   	
 It uses same query interface with unichain-Grid. Users can also subscribe block trigger, transaction trigger, contract log trigger, and contract event trigger.   	
 UnichainEvent is independent of a particular branch of java-unichain, the new event subscribes model has already be released on version 3.5 of java-unichain.	
 
@@ -8,18 +8,18 @@ UnichainEvent is independent of a particular branch of java-unichain, the new ev
  ## Download sourcecode	
 git clone https://github.com/unichainprotocol/unichain-eventquery.git        	
 
-cd unichaineventquery	
+cd eventquery
 
 ## Build	
 **mvn package**  	
 
- After the build command is executed successfully, unichaineventquery jar to release will be generated under unichaineventquery/target directory. 	
-Configuration of mongodb "config.conf" should be created for storing mongodb configuration, such as database name, username, password, and so on. We provided an example in sourcecode, which is " unichaineventquery/config.conf ". Replace with your specified configuration if needed.	
+ After the build command is executed successfully, eventquery jar to release will be generated under eventquery/target directory. 	
+Configuration of mongodb "config.conf" should be created for storing mongodb configuration, such as database name, username, password, and so on. We provided an example in sourcecode, which is " eventquery/config.conf ". Replace with your specified configuration if needed.	
 
  **Note**: 	
-Make sure the relative path of config.conf and unichaineventquery jar. The config.conf 's path is the parent of unichaineventquery jar.	
+Make sure the relative path of config.conf and eventquery jar. The config.conf 's path is the parent of eventquery jar.	
 
-  - mongo.host=IP 	
+ - mongo.host=IP 	
  - mongo.port=27017 	
  - mongo.dbname=eventlog	
  - mongo.username=unichain	
@@ -30,12 +30,12 @@ Make sure the relative path of config.conf and unichaineventquery jar. The confi
  Any configuration could be modified except **mongo.dbname**, "**eventlog**" is the specified database name for event subscribe.	
 
  ## Run	
-- unichaineventquery/deploy.sh is used to deploy unichaineventquery	
-- unichaineventquery/insertIndex.sh is used to setup mongodb index to speedup query. 	
+- eventquery/deploy.sh is used to deploy eventquery	
+- eventquery/insertIndex.sh is used to setup mongodb index to speedup query. 	
 (make sure run insertIndex before create collecions)	
 
  ## Delete expire data	
-- unichaineventquery/deleteData.sh is used to delete expire data
+- eventquery/deleteData.sh is used to delete expire data
 - using crontable delete regularly mongodb expire data(if not delete, the database will be too big)
 
 
