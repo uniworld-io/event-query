@@ -1,17 +1,14 @@
 package org.unichain.eventquery.contractlogs;
 
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.web.bind.annotation.*;
+import org.unichain.eventquery.query.QueryFactory;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.unichain.eventquery.query.QueryFactory;
 
 @RestController
 public class ContractLogController {
@@ -30,8 +27,7 @@ public class ContractLogController {
       query.setBlockNumGte(block);
     }
     query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
-    List<ContractLogTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(),
-        ContractLogTriggerEntity.class);
+    List<ContractLogTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), ContractLogTriggerEntity.class);
 
     Map map = new HashMap();
     map.put("total", queryResult.size());

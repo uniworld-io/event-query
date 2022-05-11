@@ -12,8 +12,6 @@ import java.util.HashMap;
 
 @WebFilter(urlPatterns = "/*")
 public class CommonFilter implements Filter {
-
-
     public  static String TOTAL_REQUST = "TOTAL_REQUEST";
     public  static String FAIL_REQUST = "FAIL_REQUEST";
     public  static String FAIL4XX_REQUST = "FAIL4XX_REQUEST";
@@ -62,11 +60,8 @@ public class CommonFilter implements Filter {
         preciousTime = System.currentTimeMillis();
     }
 
-
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-//        System.out.println("--------------doFilter start--------------");
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         long currentTime = System.currentTimeMillis();
         if (currentTime - preciousTime > gapMilliseconds) {   //reset every 1 minutes
             totalCount = 0;
@@ -125,9 +120,6 @@ public class CommonFilter implements Filter {
         } else {
             chain.doFilter(request, response);
         }
-//        System.out.println("TOTAL_REQUST:"+ totalCount);
-//        System.out.println("FAIL_REQUST:"+failCount);
-//        System.out.println("--------------doFilter stop--------------");
     }
 
     @Override

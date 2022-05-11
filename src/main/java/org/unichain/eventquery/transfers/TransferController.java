@@ -1,19 +1,16 @@
 package org.unichain.eventquery.transfers;
 
 import com.alibaba.fastjson.JSONObject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.unichain.eventquery.query.QueryFactory;
 import org.unichain.eventquery.transactions.TransactionTriggerEntity;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Component
@@ -22,30 +19,25 @@ public class TransferController {
   MongoTemplate mongoTemplate;
 
   @RequestMapping(method = RequestMethod.GET, value = "/transfers/total")
-  public Long totaltransfers() {
+  public Long totalTransfers() {
     QueryFactory query = new QueryFactory();
     query.setTransferType();
     return new Long(mongoTemplate.count(query.getQuery(), TransactionTriggerEntity.class));
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/transfers/total/{address}")
-  public Long addressTotaltransfers(
-      @PathVariable String address
-  ) {
+  public Long addressTotaltransfers(@PathVariable String address) {
     QueryFactory query = new QueryFactory();
     query.setTransferType();
-
     query.findAllTransferByAddress(address);
     return mongoTemplate.count(query.getQuery(), TransactionTriggerEntity.class);
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/transfers")
   public JSONObject getTransfers(
-      /******************* Page Parameters ****************************************************/
       @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
       @RequestParam(value = "sort", required = false, defaultValue = "-timeStamp") String sort,
       @RequestParam(value = "start", required = false, defaultValue = "0") int start,
-      /****************** Filter parameters *****************************************************/
       @RequestParam(value = "from", required = false, defaultValue = "") String from,
       @RequestParam(value = "to", required = false, defaultValue = "") String to,
       @RequestParam(value = "token", required = false, defaultValue = "") String token
@@ -76,14 +68,11 @@ public class TransferController {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/transfers/{hash}")
-  public JSONObject getTrnasferbyHash(
-      @PathVariable String hash
-  ) {
+  public JSONObject getTrnasferbyHash(@PathVariable String hash) {
     QueryFactory query = new QueryFactory();
     query.setTransactionIdEqual(hash);
     query.setTransferType();
-    List<TransactionTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(),
-        TransactionTriggerEntity.class);
+    List<TransactionTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), TransactionTriggerEntity.class);
     if (queryResult.size() == 0) {
       return null;
     }

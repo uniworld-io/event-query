@@ -1,19 +1,9 @@
 package org.unichain.eventquery;
 
-import static org.unichain.common.utils.LogConfig.LOG;
-import static org.unichain.eventquery.contractevents.ContractEventController.isRunRePushThread;
-
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoCredential;
 import com.mongodb.ServerAddress;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoIterable;
@@ -30,6 +20,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
+import java.util.*;
+
+import static org.unichain.common.utils.LogConfig.LOG;
+import static org.unichain.eventquery.contractevents.ContractEventController.isRunRePushThread;
+
 
 @SpringBootApplication(exclude = {MongoAutoConfiguration.class, MongoDataAutoConfiguration.class})
 @ServletComponentScan("org.unichain.eventquery.filter")
@@ -45,8 +40,7 @@ public class UniChainEventQueryApplication {
     }
 
     @Bean
-    public MongoTemplate mongoTemplate(@Autowired MongoClient mongoClient,
-                                       @Value("${mongo.dbname}") String mongodbDbName) {
+    public MongoTemplate mongoTemplate(@Autowired MongoClient mongoClient, @Value("${mongo.dbname}") String mongodbDbName) {
         return new MongoTemplate(mongoClient, mongodbDbName);
     }
 
@@ -59,8 +53,7 @@ public class UniChainEventQueryApplication {
 
     @Bean
     @SuppressWarnings("all")
-    public Map<String, Long> health(@Autowired MongoClient mongoClient,
-                                    @Value("${mongo.dbname}") String mongodbDbName) {
+    public Map<String, Long> health(@Autowired MongoClient mongoClient, @Value("${mongo.dbname}") String mongodbDbName) {
         Map<String, Long> collectionMap = new HashMap();
         try {
             MongoDatabase db = mongoClient.getDatabase(mongodbDbName);
