@@ -1,15 +1,14 @@
 package org.unichain.eventquery.solidityevents;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+
 @Document(collection = "solidity")
 public class SolidityTriggerEntity implements Serializable {
-
   private static final long serialVersionUID = -70777625567836430L;
 
   @Id
@@ -31,8 +30,7 @@ public class SolidityTriggerEntity implements Serializable {
     return latestSolidifiedBlockNumber;
   }
 
-  public SolidityTriggerEntity(Long timeStamp,
-      String triggerName, long latestSolidifiedBlockNumber) {
+  public SolidityTriggerEntity(Long timeStamp, String triggerName, long latestSolidifiedBlockNumber) {
     this.timeStamp = timeStamp;
     this.triggerName = triggerName;
     this.latestSolidifiedBlockNumber = latestSolidifiedBlockNumber;

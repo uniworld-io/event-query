@@ -2,7 +2,6 @@ package org.unichain.eventquery.response;
 
 import com.alibaba.fastjson.JSONObject;
 
-
 public class Response {
   public Response(boolean result, String msg) {
     jsonObject = new JSONObject();

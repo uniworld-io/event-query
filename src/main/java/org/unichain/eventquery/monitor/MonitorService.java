@@ -45,11 +45,11 @@ public class MonitorService {
       MonitorInfo.DataInfo.NetInfo.ApiInfo.ApiDetailInfo apiDetail =
           new MonitorInfo.DataInfo.NetInfo.ApiInfo.ApiDetailInfo();
       apiDetail.setName(entry.getKey());
-      apiDetail.setCount((int)entry.getValue().get(CommonFilter.TOTAL_REQUST));
-      apiDetail.setFailCount((int)entry.getValue().get(CommonFilter.FAIL_REQUST));
-      apiDetail.setCount2xx((int)entry.getValue().get(CommonFilter.OK_REQUST));
-      apiDetail.setCount4xx((int)entry.getValue().get(CommonFilter.FAIL4XX_REQUST));
-      apiDetail.setCount5xx((int)entry.getValue().get(CommonFilter.FAIL5XX_REQUST));
+      apiDetail.setCount((int)entry.getValue().get(CommonFilter.TOTAL_REQUEST));
+      apiDetail.setFailCount((int)entry.getValue().get(CommonFilter.FAIL_REQUEST));
+      apiDetail.setCount2xx((int)entry.getValue().get(CommonFilter.OK_REQUEST));
+      apiDetail.setCount4xx((int)entry.getValue().get(CommonFilter.FAIL4XX_REQUEST));
+      apiDetail.setCount5xx((int)entry.getValue().get(CommonFilter.FAIL5XX_REQUEST));
       apiDetails.add(apiDetail);
     }
     apiInfo.setApiDetailInfo(apiDetails);

@@ -5,7 +5,6 @@ import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 public class DataWordEntity {
-
   @Field(value = "data")
   @JsonProperty(value = "data")
   @Getter

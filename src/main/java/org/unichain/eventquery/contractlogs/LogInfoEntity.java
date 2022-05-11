@@ -1,13 +1,13 @@
 package org.unichain.eventquery.contractlogs;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-public class LogInfoEntity {
+import java.util.ArrayList;
+import java.util.List;
 
+public class LogInfoEntity {
   @Field(value = "address")
   @JsonProperty(value = "address")
   @Getter
@@ -23,8 +23,7 @@ public class LogInfoEntity {
   @Getter
   private String data;
 
-  public LogInfoEntity(String address, List<DataWordEntity> topics,
-      String data) {
+  public LogInfoEntity(String address, List<DataWordEntity> topics, String data) {
     this.address = address;
     this.topics = topics;
     this.data = data;

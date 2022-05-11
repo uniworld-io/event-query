@@ -1,15 +1,15 @@
 package org.unichain.eventquery.transactions;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.io.Serializable;
-import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.io.Serializable;
+import java.util.List;
+
 @Document(collection = "transaction")
 public class TransactionTriggerEntity implements Serializable {
-
   private static final long serialVersionUID = -70777625567836430L;
 
   @Id
@@ -118,7 +118,7 @@ public class TransactionTriggerEntity implements Serializable {
   public TransactionTriggerEntity(String transactionId, String blockHash,
       long blockNumber, long energyUsage, long energyFee, long originEnergyUsage,
       long energyUsageTotal, long netUsage, long netFee,
-      List<InternalTransactionPojo> internalTrananctionList,
+      List<InternalTransactionPojo> internalTransList,
       String fromAddress, String toAddress, String assetName, long assetAmount,
       String contractResult,long contractCallValue, String result,
       String contractAddress, String contractType,
@@ -132,7 +132,7 @@ public class TransactionTriggerEntity implements Serializable {
     this.energyUsageTotal = energyUsageTotal;
     this.netUsage = netUsage;
     this.netFee = netFee;
-    this.internalTrananctionList = internalTrananctionList;
+    this.internalTrananctionList = internalTransList;
     this.fromAddress = fromAddress;
     this.toAddress = toAddress;
     this.assetName = assetName;

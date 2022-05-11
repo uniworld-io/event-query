@@ -1,18 +1,15 @@
 package org.unichain.eventquery.transactions;
 
 import com.alibaba.fastjson.JSONObject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.unichain.eventquery.query.QueryFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Component
@@ -21,20 +18,18 @@ public class TransactionController {
   MongoTemplate mongoTemplate;
 
   @RequestMapping(method = RequestMethod.GET, value = "/transactions/total")
-  public Long totaltransaction() {
+  public Long totalTransaction() {
     QueryFactory query = new QueryFactory();
     long number = mongoTemplate.count(query.getQuery(), TransactionTriggerEntity.class);
     return number;
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/transactions")
-  public JSONObject getTranssactions(
-      /******************* Page Parameters ****************************************************/
+  public JSONObject getTransactions(
       @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
       @RequestParam(value = "sort", required = false, defaultValue = "-timeStamp") String sort,
       @RequestParam(value = "start", required = false, defaultValue = "0") int start,
       @RequestParam(value = "contractType", required = false, defaultValue = "") String contractType,
-      /****************** Filter parameters *****************************************************/
       @RequestParam(value = "block", required = false, defaultValue = "-1") long block
       ) {
     QueryFactory query = new QueryFactory();
@@ -54,20 +49,18 @@ public class TransactionController {
   }
 
   @RequestMapping(method = RequestMethod.GET, value = "/transactions/{hash}")
-  public JSONObject getTransactionbyHash(
+  public JSONObject getTransactionByHash(
       @PathVariable String hash
   ) {
 
     QueryFactory query = new QueryFactory();
     query.setTransactionIdEqual(hash);
-    List<TransactionTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(),
-        TransactionTriggerEntity.class);
+    List<TransactionTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), TransactionTriggerEntity.class);
     if (queryResult.size() == 0) {
       return null;
     }
     Map map = new HashMap();
     map.put("transaction", queryResult.get(0));
-
     return new JSONObject(map);
   }
 }

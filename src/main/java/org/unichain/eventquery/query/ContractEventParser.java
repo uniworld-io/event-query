@@ -1,11 +1,6 @@
 package org.unichain.eventquery.query;
 
 
-import static org.unichain.common.utils.LogConfig.LOG;
-
-import java.math.BigInteger;
-import java.util.regex.Pattern;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.pf4j.util.StringUtils;
 import org.spongycastle.crypto.OutputLengthException;
@@ -15,9 +10,12 @@ import org.unichain.common.runtime.utils.MUtil;
 import org.unichain.common.runtime.vm.DataWord;
 import org.unichain.core.Wallet;
 
+import java.math.BigInteger;
+import java.util.regex.Pattern;
+
+import static org.unichain.common.utils.LogConfig.LOG;
 
 public class ContractEventParser {
-
   private static final int DATAWORD_UNIT_SIZE = 32;
 
   private enum Type {
@@ -48,10 +46,8 @@ public class ContractEventParser {
       } else if (type == Type.STRING || type == Type.BYTES) {
         int start = intValueExact(startBytes);
         byte[] lengthBytes = subBytes(data, start, DATAWORD_UNIT_SIZE);
-        // this length is byte count. no need X 32
         int length = intValueExact(lengthBytes);
-        byte[] realBytes =
-            length > 0 ? subBytes(data, start + DATAWORD_UNIT_SIZE, length) : new byte[0];
+        byte[] realBytes = length > 0 ? subBytes(data, start + DATAWORD_UNIT_SIZE, length) : new byte[0];
         return type == Type.STRING ? new String(realBytes) : Hex.toHexString(realBytes);
       }
     } catch (OutputLengthException | ArithmeticException e) {
@@ -63,8 +59,7 @@ public class ContractEventParser {
   // don't support these type yet : bytes32[10][10]  OR  bytes32[][10]
   protected static Type basicType(String type) {
     if (!Pattern.matches("^.*\\[\\d*\\]$", type)) {
-      // ignore not valide type such as "int92", "bytes33", these types will be compiled failed.
-      if (type.startsWith("int") || type.startsWith("uint") || type.startsWith("trcToken")) {
+      if (type.startsWith("int") || type.startsWith("uint") || type.startsWith("urcToken")) {
         return Type.INT_NUMBER;
       } else if ("bool".equals(type)) {
         return Type.BOOL;

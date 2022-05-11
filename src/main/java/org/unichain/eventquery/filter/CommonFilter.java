@@ -12,17 +12,17 @@ import java.util.HashMap;
 
 @WebFilter(urlPatterns = "/*")
 public class CommonFilter implements Filter {
-    public  static String TOTAL_REQUST = "TOTAL_REQUEST";
-    public  static String FAIL_REQUST = "FAIL_REQUEST";
-    public  static String FAIL4XX_REQUST = "FAIL4XX_REQUEST";
-    public  static String FAIL5XX_REQUST = "FAIL5XX_REQUEST";
-    public  static String OK_REQUST = "OK_REQUEST";
+    public  static String TOTAL_REQUEST = "TOTAL_REQUEST";
+    public  static String FAIL_REQUEST = "FAIL_REQUEST";
+    public  static String FAIL4XX_REQUEST = "FAIL4XX_REQUEST";
+    public  static String FAIL5XX_REQUEST = "FAIL5XX_REQUEST";
+    public  static String OK_REQUEST = "OK_REQUEST";
     private static int totalCount = 0;
     private static int failCount = 0;
     private static int count4xx=0;
     private static int count5xx=0;
     private static int okCount=0;
-    private static int interval = 1440;      // 24 hour
+    private static int interval = 1440; // 24 hour
     private static HashMap<String, JSONObject> EndpointCount = new HashMap<String, JSONObject>();
     public String END_POINT = "END_POINT";
     public long gapMilliseconds = interval * 60 * 1000;
@@ -45,6 +45,7 @@ public class CommonFilter implements Filter {
     public int getCount4xx() {
         return count4xx;
     }
+    
     public int getCount5xx() {
         return count5xx;
     }
@@ -56,7 +57,6 @@ public class CommonFilter implements Filter {
     public CommonFilter getInstance() { return this; }
 
     @Override public void init(FilterConfig filterConfig) throws ServletException {
-        // code here
         preciousTime = System.currentTimeMillis();
     }
 
@@ -79,43 +79,39 @@ public class CommonFilter implements Filter {
             if (EndpointCount.containsKey(endpoint)) {
                 obj = EndpointCount.get(endpoint);
             } else {
-                obj.put(TOTAL_REQUST, 0);
-                obj.put(FAIL_REQUST, 0);
-                obj.put(FAIL4XX_REQUST, 0);
-                obj.put(FAIL5XX_REQUST, 0);
-                obj.put(OK_REQUST, 0);
+                obj.put(TOTAL_REQUEST, 0);
+                obj.put(FAIL_REQUEST, 0);
+                obj.put(FAIL4XX_REQUEST, 0);
+                obj.put(FAIL5XX_REQUEST, 0);
+                obj.put(OK_REQUEST, 0);
                 obj.put(END_POINT, endpoint);
             }
-            obj.put(TOTAL_REQUST, (int) obj.get(TOTAL_REQUST) + 1);
+            obj.put(TOTAL_REQUEST, (int) obj.get(TOTAL_REQUEST) + 1);
             totalCount++;
-            System.out.println("--response:"+response);
             try {
                 chain.doFilter(request, response);
                 HttpServletResponse resp = (HttpServletResponse) response;
-//                System.out.println("--status:"+resp.getStatus());
-//                System.out.println("--response:"+response);
                 if (resp.getStatus() != 200) {
                     failCount++;
                     count5xx=failCount-count4xx;
-                    obj.put(FAIL_REQUST, (int) obj.get(FAIL_REQUST) + 1);
-                    obj.put(FAIL5XX_REQUST, (int) obj.get(FAIL_REQUST)-(int) obj.get(FAIL4XX_REQUST));
+                    obj.put(FAIL_REQUEST, (int) obj.get(FAIL_REQUEST) + 1);
+                    obj.put(FAIL5XX_REQUEST, (int) obj.get(FAIL_REQUEST)-(int) obj.get(FAIL4XX_REQUEST));
                 }
                 if (resp.getStatus() < 500 & resp.getStatus() > 399) {
                     count4xx++;
                     count5xx=failCount-count4xx;
-                    obj.put(FAIL4XX_REQUST, (int) obj.get(FAIL4XX_REQUST) + 1);
-                    obj.put(FAIL5XX_REQUST, (int) obj.get(FAIL_REQUST)-(int) obj.get(FAIL4XX_REQUST));
+                    obj.put(FAIL4XX_REQUEST, (int) obj.get(FAIL4XX_REQUEST) + 1);
+                    obj.put(FAIL5XX_REQUEST, (int) obj.get(FAIL_REQUEST)-(int) obj.get(FAIL4XX_REQUEST));
                 }
             } catch (Exception e) {
                 failCount++;
                 count5xx=failCount-count4xx;
-                obj.put(FAIL_REQUST, (int) obj.get(FAIL_REQUST) + 1);
-                obj.put(FAIL5XX_REQUST, (int) obj.get(FAIL_REQUST)-(int) obj.get(FAIL4XX_REQUST));
+                obj.put(FAIL_REQUEST, (int) obj.get(FAIL_REQUEST) + 1);
+                obj.put(FAIL5XX_REQUEST, (int) obj.get(FAIL_REQUEST)-(int) obj.get(FAIL4XX_REQUEST));
                 throw e;
             }
-            obj.put(OK_REQUST, (int) obj.get(TOTAL_REQUST) - (int) obj.get(FAIL_REQUST));
+            obj.put(OK_REQUEST, (int) obj.get(TOTAL_REQUEST) - (int) obj.get(FAIL_REQUEST));
             okCount=totalCount-failCount;
-            // update map
             EndpointCount.put(endpoint, obj);
         } else {
             chain.doFilter(request, response);
