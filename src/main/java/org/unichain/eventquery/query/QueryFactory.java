@@ -3,10 +3,6 @@ package org.unichain.eventquery.query;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
 import org.pf4j.util.StringUtils;
 import org.spongycastle.util.encoders.Hex;
@@ -22,6 +18,11 @@ import org.unichain.eventquery.contractevents.ContractEventTriggerEntity;
 import org.unichain.eventquery.contractlogs.ContractLogTriggerEntity;
 import org.unichain.eventquery.contractlogs.DataWordEntity;
 import org.unichain.eventquery.contractlogs.LogInfoEntity;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class QueryFactory {
 
@@ -72,6 +73,10 @@ public class QueryFactory {
     this.query.addCriteria(Criteria.where("contractType").is(contractType));
   }
 
+  public void setEventTopicEqual(String topic) {
+    this.query.addCriteria(Criteria.where("topic").is(topic));
+  }
+
   public void setTransactionFromAddr(String fromAddr) {
     this.query.addCriteria(Criteria.where("fromAddress").is(fromAddr));
   }
@@ -106,7 +111,7 @@ public class QueryFactory {
     this.query.addCriteria(Criteria.where("contractAddress").is(addr));
   }
 
-  public void setPageniate(Pageable page) {
+  public void setPage(Pageable page) {
     this.query.with(page);
   }
 

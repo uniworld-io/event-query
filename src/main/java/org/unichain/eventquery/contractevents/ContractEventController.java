@@ -60,7 +60,7 @@ public class ContractEventController {
       query.setBlockNumGte(blocknum);
     }
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
     List<ContractEventTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     return queryResult;
   }
@@ -95,7 +95,7 @@ public class ContractEventController {
   ) {
 
     QueryFactory query = new QueryFactory();
-    query.setPageniate(QueryFactory.setPagniateVariable(0, 1, "-latestSolidifiedBlockNumber"));
+    query.setPage(QueryFactory.setPagniateVariable(0, 1, "-latestSolidifiedBlockNumber"));
     List<ContractEventTriggerEntity> contractEventTriggerEntityList = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     if (contractEventTriggerEntityList.isEmpty()) {
       return null;
@@ -106,7 +106,7 @@ public class ContractEventController {
     query.setBlockNumLte(latestSolidifiedBlockNumber);
     query.setTimestampGreaterEqual(timestamp);
     query.setRemovedEqual(false);
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
     List<ContractEventTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     return queryResult;
   }
@@ -137,7 +137,7 @@ public class ContractEventController {
     }
     query.setContractAddress(contractAddress);
     query.setEventName(eventName);
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
 
     List<ContractEventTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     return result;
@@ -179,7 +179,7 @@ public class ContractEventController {
       query.setBlockNum(blocknum);
     }
 
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     List<ContractEventTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     return result;
   }
@@ -196,7 +196,7 @@ public class ContractEventController {
       query.setContractAddress(contractAddress);
     }
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     List<ContractEventTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     return queryResult;
   }
@@ -240,7 +240,7 @@ public class ContractEventController {
     }
     query.setContractAddress(contractAddress);
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     List<ContractEventTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
 
     List<JSONObject> array = new ArrayList<>();
@@ -336,7 +336,7 @@ public class ContractEventController {
 
     query.setContractAddress(contractAddress);
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     List<ContractEventTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
     List<JSONObject> array = new ArrayList<>();
     int count = 1;
@@ -404,7 +404,7 @@ public class ContractEventController {
     query.setEventName(eventName);
 
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     List<ContractEventTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
 
     List<JSONObject> array = new ArrayList<>();
@@ -473,7 +473,7 @@ public class ContractEventController {
     query.setContractAddress(contractAddress);
     query.setEventName(eventName);
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     List<ContractEventTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractEventTriggerEntity.class);
 
     List<JSONObject> array = new ArrayList<>();
@@ -522,8 +522,32 @@ public class ContractEventController {
       query.setBlockNum(latest);
     }
     query.setTimestampGreaterEqual(timestamp);
-    query.setPageniate(this.setPagingVariable(limit, sort, start));
+    query.setPage(this.setPagingVariable(limit, sort, start));
     return mongoTemplate.find(query.getQuery(), TransactionTriggerEntity.class);
+  }
+
+  @RequestMapping(method = RequestMethod.GET, value = "/event/native")
+  public List<NativeContractEventTriggerEntity> nativeEvents(
+          @RequestParam(value = "confirmed", required = false, defaultValue = "false") boolean confirmed,
+          @RequestParam(value = "since", required = false, defaultValue = "0") long timestamp,
+          @RequestParam(value = "topic") String topic,
+          @RequestParam(value = "blockNumber", required = false, defaultValue = "-1") long latest,
+          @RequestParam(value = "sort", required = false, defaultValue = "-timeStamp") String sort,
+          @RequestParam(value = "limit", required = false, defaultValue = "25") int limit,
+          @RequestParam(value = "start", required = false, defaultValue = "0") int start) {
+    QueryFactory query = new QueryFactory();
+    if (confirmed) {
+      query.setBlockNumLte(latestSolidifiedBlockNumber.get());
+    } else {
+      query.setBlockNumGt(latestSolidifiedBlockNumber.get());
+    }
+    query.setEventTopicEqual(topic);
+    if (latest != -1) {
+      query.setBlockNum(latest);
+    }
+    query.setTimestampGreaterEqual(timestamp);
+    query.setPage(this.setPagingVariable(limit, sort, start));
+    return mongoTemplate.find(query.getQuery(), NativeContractEventTriggerEntity.class);
   }
 
   JSONObject getResultType(String fullName, String eventSignature) {
@@ -581,7 +605,7 @@ public class ContractEventController {
         while (isRunRePushThread.get()) {
           try {
             QueryFactory query = new QueryFactory();
-            query.setPageniate(QueryFactory.setPagniateVariable(0, 1, "-latestSolidifiedBlockNumber"));
+            query.setPage(QueryFactory.setPagniateVariable(0, 1, "-latestSolidifiedBlockNumber"));
             List<SolidityTriggerEntity> solidityTriggerEntityList
                 = mongoTemplate.find(query.getQuery(),
                 SolidityTriggerEntity.class);

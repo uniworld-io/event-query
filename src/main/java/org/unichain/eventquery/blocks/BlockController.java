@@ -1,18 +1,15 @@
 package org.unichain.eventquery.blocks;
 
 import com.alibaba.fastjson.JSONObject;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.unichain.eventquery.query.QueryFactory;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Component
@@ -38,7 +35,7 @@ public class BlockController {
     if (block > 0) {
       query.setBlockNumGte(block);
     }
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
     List<BlockTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), BlockTriggerEntity.class);
     Map map = new HashMap();
     map.put("total", queryResult.size());
@@ -62,7 +59,7 @@ public class BlockController {
   @RequestMapping(method = RequestMethod.GET, value = "/blocks/latestSolidifiedBlockNumber")
   public long getLatestSolidifiedBlockNumber() {
     QueryFactory query = new QueryFactory();
-    query.setPageniate(QueryFactory.setPagniateVariable(0, 1, "-latestSolidifiedBlockNumber"));
+    query.setPage(QueryFactory.setPagniateVariable(0, 1, "-latestSolidifiedBlockNumber"));
     List<BlockTriggerEntity> blockTriggerEntityList = mongoTemplate.find(query.getQuery(), BlockTriggerEntity.class);
     if (blockTriggerEntityList.isEmpty()) {
       return 0;

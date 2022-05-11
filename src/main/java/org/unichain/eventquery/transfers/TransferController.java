@@ -56,7 +56,7 @@ public class TransferController {
       query.setTransactionToken(token);
     }
 
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
 
     List<TransactionTriggerEntity> queryResult =
         mongoTemplate.find(query.getQuery(), TransactionTriggerEntity.class);

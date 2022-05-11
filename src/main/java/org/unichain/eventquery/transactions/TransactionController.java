@@ -44,7 +44,7 @@ public class TransactionController {
     if (contractType.length() != 0) {
       query.setContractTypeEqual(contractType);
     }
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
     List<TransactionTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(),
         TransactionTriggerEntity.class);
     Map map = new HashMap();

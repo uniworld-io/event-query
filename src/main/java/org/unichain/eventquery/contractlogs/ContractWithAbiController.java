@@ -45,7 +45,7 @@ public class ContractWithAbiController {
     if (eventName.length() != 0) {
       query.setEventName(eventName);
     }
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
 
     return getContractTrigger(hmap, query);
   }

@@ -26,7 +26,7 @@ public class ContractLogController {
     if (block > 0) {
       query.setBlockNumGte(block);
     }
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
     List<ContractLogTriggerEntity> queryResult = mongoTemplate.find(query.getQuery(), ContractLogTriggerEntity.class);
 
     Map map = new HashMap();
@@ -64,7 +64,7 @@ public class ContractLogController {
     if (eventName.length() != 0) {
       query.setEventName(eventName);
     }
-    query.setPageniate(QueryFactory.setPagniateVariable(start, limit, sort));
+    query.setPage(QueryFactory.setPagniateVariable(start, limit, sort));
 
     List<ContractLogTriggerEntity> result = mongoTemplate.find(query.getQuery(), ContractLogTriggerEntity.class);
     return result;
